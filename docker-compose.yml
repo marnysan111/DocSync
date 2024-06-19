@@ -1,0 +1,31 @@
+version: '3.7'
+services:
+  go:
+    build: ./go
+    container_name: go
+    volumes:
+      - ./go:/usr/src
+    ports:
+      - 8080:8080
+    restart: always
+
+  next:
+    build: ./next
+    container_name: next
+    volumes:
+      - ./next:/usr/src
+    ports:
+      - 3000:3000
+
+    restart: always
+
+  postgres:
+    build: ./postgres
+    container_name: postgres
+    volumes:
+      - ./postgres/data:/var/lib/postgresql/data/
+      - /etc/localtime:/etc/localtime:ro
+    ports:
+      - 5432:5432
+
+    restart: always
