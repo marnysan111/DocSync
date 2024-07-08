@@ -1,13 +1,8 @@
 package main
 
-import "github.com/gin-gonic/gin"
+import "github.com/marnysan111/docsync/internal/router"
 
 func main() {
-	r := gin.Default()
-	r.GET("/api", func(c *gin.Context) {
-		c.JSON(200, gin.H{
-			"message": "pong",
-		})
-	})
+	r := router.SetupRouter()
 	r.Run()
 }

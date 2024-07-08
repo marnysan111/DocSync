@@ -7,6 +7,6 @@ RUN go mod download
 
 COPY . .
 
-RUN go build -v -o ./bin/main ./cmd/main.go
+#RUN go build -v -o ./bin/main ./cmd/main.go
 
-CMD ["./bin/main"]
+CMD ["./entrypoint.sh"]
