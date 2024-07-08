@@ -17,7 +17,6 @@ export default async function Home() {
   const response: Response = await res.json()
   return (
     <main className="">
-      
       <div className="grid grid-cols-4">
       {response.data.map((value, index)=>(
         <div key={index} className="">

@@ -38,9 +38,13 @@ func SetupRouter() *gin.Engine {
 		var notes models.Note
 		id := c.Param("id")
 		if id == "1" {
-			notes = models.Note{ID: 1, Title: "Sample Title", Tag: []string{"python"}}
+			notes = models.Note{
+				ID: 1, Title: "Sample Title", Tag: []string{"python"}, Content: "this is Content ID:1",
+			}
 		} else {
-			notes = models.Note{ID: 2, Title: "Sample Title2", Tag: []string{"go", "golang"}}
+			notes = models.Note{
+				ID: 2, Title: "Sample Title2", Tag: []string{"go", "golang"}, Content: "this is Content ID:1",
+			}
 		}
 		c.JSON(200, gin.H{
 			"result":  "success",
