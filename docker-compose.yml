@@ -5,6 +5,7 @@ services:
     container_name: go
     volumes:
       - ./go:/usr/src
+      - ./docs:/usr/docs
     ports:
       - 8080:8080
     restart: always

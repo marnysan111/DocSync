@@ -3,7 +3,7 @@ import Link from "next/link"
 type Props = {
     id: number,
     title: string,
-    tag:  [string]
+    tag:  string[]
 }
 
 export default async function NoteCard({id, title, tag}: Props) {

@@ -3,7 +3,7 @@ import NoteCard from "./components/NoteCard";
 interface Note {
   ID: number,
   Title: string,
-  Tag: [string]
+  Tag: string[]
 }
 
 interface Response {
@@ -13,8 +13,7 @@ interface Response {
 }
 
 export default async function Home() {
-  const res = await fetch("http://go:8080/api/notes", { cache: "no-store" })
-  const response: Response = await res.json()
+  const response = await getNote()
   return (
     <main className="">
       <div className="grid grid-cols-4">
@@ -30,4 +29,11 @@ export default async function Home() {
       </div>
     </main>
   );
+}
+
+
+const getNote = async () => {
+  const res = await fetch("http://go:8080/api/notes", { cache: "no-store" })
+  const response: Response = await res.json()
+  return response
 }
