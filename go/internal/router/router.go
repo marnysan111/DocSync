@@ -1,14 +1,17 @@
 package router
 
 import (
+	"strconv"
+
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
-	"github.com/marnysan111/docsync/internal/models"
+	"github.com/marnysan111/docsync/internal/notes"
 	"github.com/marnysan111/docsync/internal/websocket"
 )
 
 func SetupRouter() *gin.Engine {
 	r := gin.Default()
+	notes.InitNotes()
 	r.Use(cors.New(cors.Config{
 		AllowAllOrigins:  true,
 		AllowMethods:     []string{"GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"},
@@ -24,37 +27,35 @@ func SetupRouter() *gin.Engine {
 		})
 	})
 	api.GET("/notes", func(c *gin.Context) {
-		var notes []models.Note
-		notes = append(notes, models.Note{ID: 1, Title: "Sample Title", Tag: []string{"python"}})
-		notes = append(notes, models.Note{ID: 2, Title: "Sample Title2", Tag: []string{"go", "golang"}})
+		noteList := notes.GetNoteList()
 		c.JSON(200, gin.H{
 			"result":  "success",
 			"message": "pong",
-			"data":    notes,
+			"data":    noteList,
 		})
 	})
 
 	api.GET("/note/:id", func(c *gin.Context) {
-		var notes models.Note
-		id := c.Param("id")
-		if id == "1" {
-			notes = models.Note{
-				ID: 1, Title: "Sample Title", Tag: []string{"python"}, Content: "this is Content ID:1",
-			}
-		} else {
-			notes = models.Note{
-				ID: 2, Title: "Sample Title2", Tag: []string{"go", "golang"}, Content: "this is Content ID:1",
-			}
+		i := c.Param("id")
+		id, _ := strconv.Atoi(i)
+		note, checksum := notes.GetNoteByID(id)
+		if !checksum {
+			c.JSON(400, gin.H{
+				"result": "error",
+				"data":   "error",
+			})
 		}
 		c.JSON(200, gin.H{
 			"result":  "success",
 			"message": "pong",
-			"data":    notes,
+			"data":    note,
 		})
 	})
 
-	r.GET("/ws", func(c *gin.Context) {
-		websocket.ConnHandler(c)
+	go websocket.HandleMessage()
+	r.GET("/note/:id/ws", func(c *gin.Context) {
+		i := c.Param("id")
+		websocket.ConnHandler(c, i)
 	})
 	return r
 }

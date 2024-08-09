@@ -6,3 +6,9 @@ type Note struct {
 	Tag     []string
 	Content string
 }
+
+type NoteList struct {
+	ID    int
+	Title string
+	Tag   []string
+}

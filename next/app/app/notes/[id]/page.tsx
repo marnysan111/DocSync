@@ -18,9 +18,11 @@ export default async function Note({ params }: { params: { id: string }}) {
   const id = params.id;
   const res = await fetch("http://go:8080/api/note/"+id, { cache: 'no-store' })
   const response: Response = await res.json()
+
   return (
     <div>
       <MarkdownEditor 
+        id={response.data.ID}
         title={response.data.Title}
         tag={response.data.Tag}
         content={response.data.Content}

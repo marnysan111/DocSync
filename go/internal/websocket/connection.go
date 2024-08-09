@@ -17,20 +17,13 @@ var wsupgrader = websocket.Upgrader{
 	},
 }
 
-func ConnHandler(ctx *gin.Context) {
-	// upgraderを呼び出すことで通常のhttp通信からwebsocketへupgrade
-	// コネクションを作成する
+func ConnHandler(ctx *gin.Context, i string) {
 	conn, err := wsupgrader.Upgrade(ctx.Writer, ctx.Request, nil)
 	if err != nil {
 		log.Printf("Failed to set websocket upgrade: %+v\n", err)
 		return
 	}
-
-	// コネクションをclientsマップへ追加
 	models.Clients[conn] = true
-
-	// 無限ループさせることでクライアントからのメッセージを受け付けられる状態にする
-	// クライアントとのコネクションが切れた場合はReadMessage()関数からエラーが返る
 	for {
 		t, msg, err := conn.ReadMessage()
 		if err != nil {

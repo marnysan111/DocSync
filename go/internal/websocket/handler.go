@@ -1,6 +1,7 @@
 package websocket
 
 import (
+	"fmt"
 	"log"
 
 	"github.com/marnysan111/docsync/internal/models"
@@ -9,6 +10,7 @@ import (
 func HandleMessage() {
 	for {
 		message := <-models.Broadcast
+		fmt.Println("handle: ", message)
 		for client := range models.Clients {
 			err := client.WriteMessage(message.Type, message.Message)
 			if err != nil {
